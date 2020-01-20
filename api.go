@@ -50,6 +50,17 @@ func addUser(c *gin.Context)  {
 	login := c.PostForm("login")
 	password := c.PostForm("password")
 	avatar := c.PostForm("avatar")
+	rows, err := db.Query(fmt.Sprintf("select * from users where login = '%s'", login))
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	if rows.Next() {
+		c.JSON(400, gin.H{"error": "Login " + login + " in use"})
+		return
+	}
+
 	stmt, err := db.Prepare("insert into users(login, fullName, password, avatar) values(?, ?,  ?, ?)")
 	if err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
@@ -78,25 +89,20 @@ func login(c *gin.Context) {
 	}
 
 	hashPwd, _ := HashPassword(password)
-	rows, err := db.Query(fmt.Sprintf("select * from users where login = '%s' and password = '%s' limit 1", username, hashPwd))
+	rows, err := db.Query(fmt.Sprintf("select * from users where login = '%s' and password = '%s'", username, hashPwd))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	// Check for username and password match, usually from a database
-	var uid int
-	var user string
-	var fullName string
-	var avatar string
 
 	if  rows.Next() {
-		err = rows.Scan(&uid, &user, &fullName, &avatar)
 		session.Set(userkey, username) // In real world usage you'd set this to the users ID
 		if err := session.Save(); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save session"})
 			return
 		}
-		c.Redirect(307, "/")
+		c.Redirect(302, "/")
+		return
 	}
 
 	c.JSON(http.StatusUnauthorized, gin.H{"error": "Authentication failed"})

@@ -20,8 +20,11 @@ const (
 var db *sql.DB
 
 func main() {
+	fmt.Println("Server start")
+	p, _ := HashPassword("password")
+	fmt.Println(p)
 	var err error
-	db, err = sql.Open("sqlite3", "./database.db")
+	db, err = sql.Open("sqlite3", "db/database.db")
 	if err != nil {
 		log.Fatal(err)
 	}

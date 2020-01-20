@@ -13,5 +13,3 @@ create  table  votes (
   subject varchar(255)
 );
 
-dupa8
-dupa8
