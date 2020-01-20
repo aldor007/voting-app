@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <titleAdd user></titleAdd>
+    <style type="text/css">
+        img {
+            max-width: 100%; /* This rule is very important, please do not ignore this! */
+        }
+        .image_container{
+            width:600px;
+            height: 500px;
+        }
+    </style>
+
+    <title>Schedule instagram post</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.3/jquery-ui-timepicker-addon.min.css" />
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+<body>
+Add user
+
+<form method="post" action="/api/users">
+    <div class="form-group">
+        <label for="exampleInputEmail1">Login</label>
+        <input type="login" class="form-control" id="login" name="login" aria-describedby="emailHelp" placeholder="Enter login">
+    </div>
+    <div class="form-group">
+        <label for="exampleInputEmail1">Full Name</label>
+        <input type="login" class="form-control" id="fullName" name="fullName" aria-describedby="emailHelp" placeholder="Enter first name and surname">
+    </div>
+    <div class="form-group">
+        <label for="exampleInputPassword1">Password</label>
+        <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+    </div>
+    <div class="form-group">
+        <label for="exampleInputPassword1">Avatar url</label>
+        <input type="text" class="form-control" name="avatar" id="avatar" placeholder="Avatar url">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+</body>
+</html>
+

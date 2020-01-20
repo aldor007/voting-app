@@ -1,0 +1,47 @@
+<html>
+<head>
+    <title>Voting app</title>
+</head>
+<script>
+    function vote(login) {
+        var xhttp = new XMLHttpRequest();
+
+        xhttp.open("POST", "/api/vote/"+ login, true);
+        xhttp.send();
+        alert("Vote done")
+    }
+</script>
+<style>
+    .row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+        grid-gap: 11px;
+    }
+    .item {
+        display: block;
+    }
+    figcaption {
+        margin-top: 5px
+    }
+</style>
+<body>
+<div class="row">
+    {{ range $i, $user := .users }}
+
+    <div class="item ">
+        <figure>
+            <img src="{{ $user.Avatar }}">
+           <figcaption>
+            <span> {{ $user.FullName }}
+                Votes : {{ $user.Votes }} </span>
+                   <button vote="/api/vote{{ $user.Login}} " onclick="vote('{{ $user.Login }}')">Vote</button>
+           </figcaption>
+        </figure>
+    </div>
+    {{ end}}
+
+</div>
+
+</body>
+</html>
