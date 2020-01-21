@@ -1,14 +1,14 @@
 package main
 
 import (
-	"net/http"
-	"strings"
+	"fmt"
 	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
-	"fmt"
+	"log"
+	"net/http"
+	"strings"
 	"time"
 )
-
 
 // AuthRequired is a simple middleware to check the session
 func AuthRequired(c *gin.Context) {
@@ -27,32 +27,41 @@ func AuthRequired(c *gin.Context) {
 func vote(c *gin.Context) {
 	session := sessions.Default(c)
 	user := session.Get(userkey)
-	stmt, err := db.Prepare("insert into votes(timestamp, voter, subject) values(?, ?, ?)")
-	if err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
-		return
-	}
 	subject := c.Param("subject")
 	if subject == "" {
 		c.JSON(400, gin.H{"error": "wrong path"})
 		return
 	}
+	stmt, err := db.Prepare("insert into votes(timestamp, voter, subject) values(?, ?, ?)")
+	if err != nil {
+		log.Print("Error in prepare vote stmtdb", err)
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
 
 	_, err = stmt.Exec(time.Now().Unix(), user, subject)
 	if err != nil {
+		log.Print("Error in insert vote in db", err)
 		c.JSON(500, gin.H{"error": err.Error()})
 		return
 	}
 }
 
-func addUser(c *gin.Context)  {
+func addUser(c *gin.Context) {
 	username := c.PostForm("fullName")
 	login := c.PostForm("login")
 	password := c.PostForm("password")
 	avatar := c.PostForm("avatar")
 	rows, err := db.Query(fmt.Sprintf("select * from users where login = '%s'", login))
 	if err != nil {
+		log.Print("Error in select users from db", err)
 		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	if username == "" || login == "" || password == "" {
+		log.Println("Empty data")
+		c.JSON(500, gin.H{"error": "invalid data"})
 		return
 	}
 
@@ -73,7 +82,7 @@ func addUser(c *gin.Context)  {
 		return
 	}
 
-	c.JSON(200, gin.H{"status":"ok", "message": "user added"})
+	c.JSON(200, gin.H{"status": "ok", "message": "user added"})
 }
 
 // login is a handler that parses a form and checks for specific data
@@ -95,7 +104,7 @@ func login(c *gin.Context) {
 		return
 	}
 
-	if  rows.Next() {
+	if rows.Next() {
 		session.Set(userkey, username) // In real world usage you'd set this to the users ID
 		if err := session.Save(); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save session"})

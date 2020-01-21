@@ -13,7 +13,7 @@
         }
     </style>
 
-    <title>Schedule instagram post</title>
+    <title>Add user</title>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.3/jquery-ui-timepicker-addon.min.css" />
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -26,7 +26,7 @@ Add user
 <form method="post" action="/api/users">
     <div class="form-group">
         <label for="exampleInputEmail1">Login</label>
-        <input type="login" class="form-control" id="login" name="login" aria-describedby="emailHelp" placeholder="Enter login">
+        <input type="login" class="form-control" id="login" name="login" aria-describedby="emailHelp" required pattern="[a-zA-Z0-9]+" placeholder="Enter login">
     </div>
     <div class="form-group">
         <label for="exampleInputEmail1">Full Name</label>

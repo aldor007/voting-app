@@ -1,6 +1,8 @@
 <html>
 <head>
     <title>Voting app</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
 </head>
 <script>
     function vote(login) {
@@ -8,10 +10,16 @@
 
         xhttp.open("POST", "/api/vote/"+ login, true);
         xhttp.onreadystatechange = function() { // Call a function when the state changes.
-            if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                alert("Vote done")
-            } else {
-                console.error('Upss..', this.status)
+            if (this.readyState === XMLHttpRequest.DONE) {
+            
+                if (this.status === 200) {
+                    var count = parseInt(document.getElementById("votes-" + login).textContent);
+                    document.getElementById("votes-" + login).textContent = count + 1;
+                    alert("Vote done")
+                } else {
+                    console.error('Upss..', this.status)
+                    alert("Something went wrong :()")
+                }
             }
         }
         xhttp.send();
@@ -40,8 +48,8 @@
             <img src="{{ $user.Avatar }}">
            <figcaption>
             <span> {{ $user.FullName }}
-                Votes : {{ $user.Votes }} </span>
-                   <button vote="/api/vote{{ $user.Login}} " onclick="vote('{{ $user.Login }}')">Vote</button>
+                Votes : <span id="votes-{{ $user.Login }}">{{ $user.Votes }} </span>
+                   <button type="button" class="btn btn-lg btn-primary" onclick="vote('{{ $user.Login }}')">Vote</button>
            </figcaption>
         </figure>
     </div>
